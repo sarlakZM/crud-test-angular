@@ -6,7 +6,7 @@ import { RouterOutlet } from '@angular/router';
   imports: [RouterOutlet],
   template: `
     <section class="container">
-      <router-outlet/>
+      <router-outlet />
     </section>
   `,
 })

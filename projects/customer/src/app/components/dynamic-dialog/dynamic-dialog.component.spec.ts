@@ -15,12 +15,17 @@ describe('Component: DynamicDialogComponent', () => {
   const dialogData = {
     mode: 'add',
     item: {},
-    title: 'Add Data'
-  }
+    title: 'Add Data',
+  };
   beforeEach(async () => {
-    mockCustomersStore = jasmine.createSpyObj('CustomersStore', 
-      ['getCutomersEmails', 'customers', 'AddCustomer', 'updateCustomerByID', 'isLoading']);
-  
+    mockCustomersStore = jasmine.createSpyObj('CustomersStore', [
+      'getCutomersEmails',
+      'customers',
+      'AddCustomer',
+      'updateCustomerByID',
+      'isLoading',
+    ]);
+
     mockCustomersStore.isLoading.and.returnValue(false); // Mock isLoading to return false
     mockDialogRef = jasmine.createSpyObj('MatDialogRef', ['close']);
 
@@ -34,9 +39,8 @@ describe('Component: DynamicDialogComponent', () => {
         { provide: MAT_DIALOG_DATA, useValue: dialogData },
         { provide: MatDialogRef, useValue: mockDialogRef },
         { provide: CustomersStore, useValue: mockCustomersStore },
-      ]
-    })
-    .compileComponents();
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(DynamicDialogComponent);
     component = fixture.componentInstance;
@@ -65,13 +69,13 @@ describe('Component: DynamicDialogComponent', () => {
       dateOfBirth: new Date(),
       phoneNumber: 9123456789,
       email: 'john@example.com',
-      bankAccountNumber: 1234567890
+      bankAccountNumber: 1234567890,
     });
     component.onSubmit();
     expect(mockCustomersStore.AddCustomer).toHaveBeenCalledWith(jasmine.objectContaining({ firstname: 'firstname' }));
     expect(mockDialogRef.close).toHaveBeenCalled();
   });
-  
+
   it('should call updateCustomerByID on submit when mode is edit', () => {
     dialogData.mode = 'edit';
     dialogData.item = { id: 1 };
@@ -82,12 +86,13 @@ describe('Component: DynamicDialogComponent', () => {
       dateOfBirth: new Date(),
       phoneNumber: 9123456789,
       email: 'john@example.com',
-      bankAccountNumber: 1234567890
+      bankAccountNumber: 1234567890,
     });
     component.onSubmit();
-    expect(mockCustomersStore.updateCustomerByID).toHaveBeenCalledWith(1, jasmine.objectContaining({ firstname: 'firstname' }));
+    expect(mockCustomersStore.updateCustomerByID).toHaveBeenCalledWith(
+      1,
+      jasmine.objectContaining({ firstname: 'firstname' })
+    );
     expect(mockDialogRef.close).toHaveBeenCalled();
   });
-  
-  
 });

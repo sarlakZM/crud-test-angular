@@ -1,6 +1,6 @@
-import { ICustomerWithID } from "./customer.model";
+import { ICustomerWithID } from './customer.model';
 
 export type CustomersState = {
-    customers: ICustomerWithID[];
-    isLoading: boolean;
+  customers: ICustomerWithID[];
+  isLoading: boolean;
 };

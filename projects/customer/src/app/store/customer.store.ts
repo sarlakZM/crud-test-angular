@@ -1,20 +1,12 @@
 import { computed, inject } from '@angular/core';
-import {
-  patchState,
-  signalStore,
-  withComputed,
-  withMethods,
-  withProps,
-  withState,
-} from '@ngrx/signals';
+import { patchState, signalStore, withComputed, withMethods, withProps, withState } from '@ngrx/signals';
 import { ICustomer } from '../models/customer.model';
 import { CustomerService } from '../services/customer.service';
 import { CustomersState } from '../models/store.model';
 
-
 const initialState: CustomersState = {
-    customers: [],
-    isLoading: false,
+  customers: [],
+  isLoading: false,
 };
 
 export const CustomersStore = signalStore(
@@ -25,7 +17,7 @@ export const CustomersStore = signalStore(
   })),
   withComputed(({ customers }) => ({
     getCutomers: computed(() => customers()),
-    getCutomersEmails: computed(() => customers().map(customer => customer.email)),    
+    getCutomersEmails: computed(() => customers().map((customer) => customer.email)),
   })),
   withMethods(({ customerService, ...store }) => ({
     async loadCustomers(): Promise<void> {
@@ -33,30 +25,29 @@ export const CustomersStore = signalStore(
       const customers = customerService.getAll() ?? [];
       patchState(store, { customers, isLoading: false });
     },
-    updateCustomerByID( id: number, customer: ICustomer): void {  
-        patchState(store, { isLoading: true });
-        patchState(store, (state: CustomersState) => {
-          const customers = state.customers.map( item => item.id === id ? { id , ...customer} : item);
-          customerService.update(customers)
-          return { customers, isLoading: false}
-        });
+    updateCustomerByID(id: number, customer: ICustomer): void {
+      patchState(store, { isLoading: true });
+      patchState(store, (state: CustomersState) => {
+        const customers = state.customers.map((item) => (item.id === id ? { id, ...customer } : item));
+        customerService.update(customers);
+        return { customers, isLoading: false };
+      });
     },
-    AddCustomer( customer: ICustomer): void {  
-        patchState(store, { isLoading: true });
-        patchState(store,  ( state: CustomersState) => {
-            const customers = [...state.customers, {...customer, id: Date.now()}];
-            customerService.update(customers)
-           return  { customers: [...customers] , isLoading: false}
-        
-        });
+    AddCustomer(customer: ICustomer): void {
+      patchState(store, { isLoading: true });
+      patchState(store, (state: CustomersState) => {
+        const customers = [...state.customers, { ...customer, id: Date.now() }];
+        customerService.update(customers);
+        return { customers: [...customers], isLoading: false };
+      });
     },
-    removeCustomerByID( id: number): void {  
-        patchState(store, { isLoading: true });
-        patchState(store, (state: CustomersState) => {
-          const customers = state.customers.filter( item => item.id !== id);
-          customerService.update(customers)
-          return { customers, isLoading: false}
-        });
+    removeCustomerByID(id: number): void {
+      patchState(store, { isLoading: true });
+      patchState(store, (state: CustomersState) => {
+        const customers = state.customers.filter((item) => item.id !== id);
+        customerService.update(customers);
+        return { customers, isLoading: false };
+      });
     },
-  })),
+  }))
 );

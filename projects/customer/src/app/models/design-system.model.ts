@@ -1,18 +1,17 @@
 export interface Column {
-    columnDef: string;
-    header: string;
-    cell: (element: any) => string;
+  columnDef: string;
+  header: string;
+  cell: (element: any) => string;
 }
 
-
 export const MY_DATE_FORMATS = {
-    parse: {
-        dateInput: 'DD/MM/YYYY',
-    },
-    display: {
-        dateInput: 'DD/MM/YYYY',
-        monthYearLabel: 'MMMM YYYY',
-        dateA11yLabel: 'LL',
-        monthYearA11yLabel: 'MMMM YYYY'
-    }
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
 };

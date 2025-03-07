@@ -1,27 +1,28 @@
-import { inject, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { CustomersStore } from './customer.store';
 import { CustomerService } from '../services/customer.service';
 import { CustomersState } from '../models/store.model';
 import { ICustomerWithID } from '../models/customer.model';
 
-
 describe('Store: CustomersStore Methods', () => {
-  let store: any;//typeof CustomersStore
+  let store: any; //typeof CustomersStore
   let customerService: jasmine.SpyObj<CustomerService>;
   const initialState: CustomersState = {
     customers: [],
     isLoading: false,
-};
-  const mockResult: ICustomerWithID[]= [{
-    id:1,
-    firstname: 'FirstName',
-    lastname: 'Lastname',
-    dateOfBirth: '06/03/2025',
-    phoneNumber: +981231231212,
-    bankAccountNumber: 123456789123,
-    email: 'test@gmail.com',
-  }];
+  };
+  const mockResult: ICustomerWithID[] = [
+    {
+      id: 1,
+      firstname: 'FirstName',
+      lastname: 'Lastname',
+      dateOfBirth: '06/03/2025',
+      phoneNumber: +981231231212,
+      bankAccountNumber: 123456789123,
+      email: 'test@gmail.com',
+    },
+  ];
   beforeEach(() => {
     customerService = jasmine.createSpyObj('CustomerService', ['getAll', 'update']);
 
@@ -30,8 +31,7 @@ describe('Store: CustomersStore Methods', () => {
         CustomersStore,
         { provide: CustomerService, useValue: customerService },
         provideMockStore({ initialState }),
-
-      ]
+      ],
     });
 
     store = TestBed.inject(CustomersStore);
@@ -51,8 +51,7 @@ describe('Store: CustomersStore Methods', () => {
     store.updateCustomerByID(1, mockCustomer);
 
     expect(customerService.update).toHaveBeenCalled();
-    expect(store.getCutomers().some((c: any)  => c.id === 1)).toBeFalse();
-
+    expect(store.getCutomers().some((c: any) => c.id === 1)).toBeFalse();
   });
 
   it('should add a new customer', () => {
@@ -71,11 +70,11 @@ describe('Store: CustomersStore Methods', () => {
   });
 
   it('should remove a customer by ID', () => {
-    const mockCustomers = mockResult;
+    // const mockCustomers = mockResult;
     store.loadCustomers(); // Mock initial load
     store.removeCustomerByID(1);
 
     expect(customerService.update).toHaveBeenCalled();
-    expect(store.getCutomers().some((c: any)  => c.id === 1)).toBeFalse();
+    expect(store.getCutomers().some((c: any) => c.id === 1)).toBeFalse();
   });
 });

@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LocalStorageService {
   private readonly localStorage = inject(DOCUMENT)?.defaultView?.localStorage;
@@ -24,9 +24,9 @@ export class LocalStorageService {
   remove(key: string): void {
     this.localStorage?.removeItem(key);
   }
-  
+
   removeKeys(keys: string[]): void {
-    keys.forEach(key => this.localStorage?.removeItem(key));
+    keys.forEach((key) => this.localStorage?.removeItem(key));
   }
 
   clear(): void {
