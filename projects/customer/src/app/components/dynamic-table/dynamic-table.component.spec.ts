@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { input } from '@angular/core';
 
 import { DynamicTableComponent } from './dynamic-table.component';
 import { ICustomerWithID } from '../../models/customer.model';
@@ -39,7 +40,38 @@ describe('Component: DynamicTableComponent', () => {
     component.dataSource.data = mockResult;
     expect(component.dataSource.data).toEqual(mockResult);
   });  
+
+  it('should initialize data source and paginator', () => {
+
+    // Mock the input data and columns within the proper context
+    TestBed.runInInjectionContext(() => {
+      component.data = input(mockResult);
+      component.columns = input(columns);
+      component.displayedColumns = input(columns.map(c => c.columnDef));
+    });
+
+    // Trigger the effect and detect changes
+    component.updateTable();
+    fixture.detectChanges();
+
+    expect(component.dataSource.data.length).toBe(1);
+    expect(component.displayedColumns()).toContain('firstname');
+    expect(component.dataSource.paginator).toBeDefined();
+  });
   
+  it('should update table on data change', () => {
+
+      // Mock the data input within the proper context
+      TestBed.runInInjectionContext(() => {
+        component.data = input(mockResult);
+      });
+
+      component.updateTable();
+      fixture.detectChanges();
+
+      expect(component.dataSource.data).toEqual(mockResult);
+  });
+
   it('should initialize paginator correctly', () => {
     component.ngAfterViewInit();
     expect(component.dataSource.paginator).toBe(component.paginator);

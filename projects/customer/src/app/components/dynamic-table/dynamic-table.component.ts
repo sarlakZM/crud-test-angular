@@ -14,7 +14,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
   styleUrl: './dynamic-table.component.scss'
 })
 export class DynamicTableComponent {
-  readonly data = input<any>([], {alias: 'dataSource'});
+  data = input<any>([], {alias: 'dataSource'});
   dataSource = new MatTableDataSource<any>(this.data());
 
   columns = input<Column[]>([], {alias: 'columns'});
@@ -25,15 +25,26 @@ export class DynamicTableComponent {
   itemChanged = output<any>({alias: 'itemChanged'});
   itemRemoved = output<number>({alias: 'itemRemoved'});
 
+  /*
+    The effect in the constructor now calls updateTable to ensure 
+    the data source and paginator are synchronized.
+  */
   constructor() {
     effect(() => {
       this.columns();
-      this.dataSource = new MatTableDataSource(this.data());
+      this.updateTable();
     });
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+  }
+
+  updateTable() {
+    this.dataSource = new MatTableDataSource(this.data());
+    if (this.paginator) {
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
 }
