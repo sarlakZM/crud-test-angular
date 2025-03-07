@@ -18,15 +18,17 @@
                     </td>
                     }
                 </ng-container>
-            }@empty {
-                <mat-progress-spinner></mat-progress-spinner>
-                <div >loading ...</div>
             }
-            
+
         <!-- Header and Row -->
         <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns();"></tr>
     </table>
+
+    <!-- Not Data -->
+    @if(data().length == 0){
+        <img src="no-results.gif" alt="No Result"/>
+    }
 
     <!--Pagination -->
     <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
