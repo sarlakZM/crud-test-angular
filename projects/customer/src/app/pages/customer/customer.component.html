@@ -1,0 +1,8 @@
+<div class="buttons-container">
+    <button mat-raised-button aria-label="add customer" (click)="addCustomer()">
+      <mat-icon>add</mat-icon> Add Customer
+    </button>
+</div>
+  
+  <app-dynamic-table [dataSource]="dataSource" [columns]="columns"
+  (itemChanged)="itemChanged($event)"  (itemRemoved)="itemRemoved($event)"/>

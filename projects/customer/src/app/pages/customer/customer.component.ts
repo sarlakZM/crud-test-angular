@@ -1,0 +1,70 @@
+import {Component, effect, inject} from '@angular/core';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import { ICustomer, ICustomerWithID } from '../../models/customer.model';
+import { Column } from '../../models/design-system.model';
+import { DynamicTableComponent } from '../../components/dynamic-table/dynamic-table.component';
+import { MatDialog } from '@angular/material/dialog';
+import { DynamicDialogComponent } from '../../components/dynamic-dialog/dynamic-dialog.component';
+import { CustomersStore } from '../../store/customer.store';
+
+
+
+@Component({
+  selector: 'app-customer',
+  imports: [MatButtonModule, MatIconModule, DynamicTableComponent],
+  templateUrl: './customer.component.html',
+  styleUrl: './customer.component.scss'
+})
+export class CustomerComponent {
+  readonly customersStore = inject(CustomersStore);
+  readonly dialog = inject(MatDialog);
+
+  dataSource: ICustomerWithID[] = [];
+  columns: Column[] = [
+    { columnDef: 'firstname', header: 'firstname', cell: (element: any) => `${element.firstname}` },
+    { columnDef: 'lastname', header: 'lastname', cell: (element: any) => `${element.lastname}` },
+    { columnDef: 'dateOfBirth', header: 'dateOfBirth', cell: (element: any) => `${element.dateOfBirth}` },
+    { columnDef: 'phoneNumber', header: 'phoneNumber', cell: (element: any) => `${element.phoneNumber}` },
+    { columnDef: 'email', header: 'Email', cell: (element: any) => `${element.email}` },
+    { columnDef: 'bankAccountNumber', header: 'BankAccountNumber', cell: (element: any) => `${element.bankAccountNumber}` },
+    { columnDef: 'actions', header: 'Actions', cell: (element: any) => `${element.actions}` }
+  ];
+
+  constructor(){
+    effect(() => {
+      this.dataSource = this.customersStore.getCutomers();
+    });
+  }
+
+
+
+  addCustomer () {
+    const dialogRef = this.dialog.open(DynamicDialogComponent, {
+      data: {
+        mode: 'add',
+        title: 'Add Data'
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');     
+    });
+    
+  }
+
+  itemRemoved (id: number) {
+    this.customersStore.removeCustomerByID(id);
+  }
+
+  itemChanged (item: ICustomer) {
+    this.dialog.open(DynamicDialogComponent, {
+      data: {
+        mode: 'edit',
+        item: item,
+        title: 'Edit Data'
+      },
+    });
+
+  }
+}

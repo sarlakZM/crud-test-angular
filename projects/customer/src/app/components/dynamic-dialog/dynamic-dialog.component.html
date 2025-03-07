@@ -1,0 +1,117 @@
+<h2 mat-dialog-title>{{ dataDialog().title }}</h2>
+<mat-dialog-content class="dialog">
+  
+    <form [formGroup]="customerForm" class="example-container" (ngSubmit)="onSubmit()" novalidate>
+
+        <mat-form-field hintLabel="Max 20 characters">
+            <mat-label for="firstname">First Name:</mat-label>
+            <input id="firstname" matInput #input maxlength="20" 
+                        placeholder="First Name" 
+                        formControlName="firstname"/>
+                        @if(getErrorMessage('firstname')){
+                            <mat-error>{{ getErrorMessage('firstname') }}</mat-error>  
+                        }        
+                    </mat-form-field>
+
+        <mat-form-field hintLabel="Max 20 characters">
+            <mat-label for="lastname">Last Name:</mat-label>
+            <input id="lastname" matInput #input maxlength="20" 
+                        placeholder="Last Name" 
+                        formControlName="lastname"
+                        />
+                        @if(getErrorMessage('lastname')){
+                            <mat-error>{{ getErrorMessage('lastname') }}</mat-error>  
+                        } 
+            </mat-form-field>
+
+
+        <mat-form-field>
+            <mat-label for="phoneNumber">Phone Number</mat-label>
+            <input id="phoneNumber" name="phoneNumber" type="text" matInput #input 
+                        placeholder="Ex. +98 ... ... .. .."
+                        formControlName="phoneNumber"
+                        />           
+            <mat-icon matSuffix>phone</mat-icon>
+            @if(getErrorMessage('phoneNumber')){
+                <mat-error>{{ getErrorMessage('phoneNumber') }}</mat-error>  
+            }
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label forr="email">Enter your email</mat-label>
+            <input
+              matInput
+              placeholder="test@example.com"
+              formControlName="email"
+              required
+            />
+            @if(getErrorMessage('email')){
+                <mat-error>{{ getErrorMessage('email') }}</mat-error>  
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label for="dateOfBirth">Date Of Birth</mat-label>
+            <input matInput id="dateOfBirth" [matDatepicker]="picker" formControlName="dateOfBirth">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            @if(getErrorMessage('dateOfBirth')){
+                <mat-error>{{ getErrorMessage('dateOfBirth') }}</mat-error>  
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label for="bankAccountNumber">Bank Account Number</mat-label>
+            <input id="bankAccountNumber" matInput #input 
+                        placeholder="Bank Account Number" 
+                        formControlName="bankAccountNumber"
+                         />
+            <mat-icon matSuffix>account_balance_wallet</mat-icon>
+            @if(getErrorMessage('bankAccountNumber')){
+                <mat-error>{{ getErrorMessage('bankAccountNumber') }}</mat-error>  
+            }
+        </mat-form-field>
+
+        @if(customerForm.hasError('uniqueMultiField') && 
+        (customerForm.touched || customerForm.dirty)
+        ){
+            <div class="cross-validation-error-message alert">
+                {{ customerForm.getError('uniqueMultiField')?.value }}
+             </div>
+        }
+
+        {{customerForm.valid}}
+        {{customerForm.errors}}
+
+      <div mat-dialog-actions align="end">
+        <button mat-raised-button  mat-dialog-close>Cancel</button>
+
+        @if(dataDialog().mode === 'add'){
+            <button mat-raised-button  type="submit" [disabled]="!customerForm.valid">
+    
+            <mat-icon>save</mat-icon> Save
+        </button>
+        }@else{
+            <button mat-raised-button  type="submit" [disabled]="!customerForm.valid" >
+            <mat-icon>edit</mat-icon> Edit
+        </button>
+        }
+      </div>
+    </form>
+
+</mat-dialog-content>
+<!-- <mat-dialog-actions align="end">
+  <button mat-raised-button  mat-dialog-close>Cancel</button>
+    @if(dataDialog().mode === 'add'){
+        <button mat-raised-button  type="submit" [disabled]="!customerForm.valid">
+
+        <mat-icon>save</mat-icon> Save
+    </button>
+    }@else{
+        <button mat-raised-button   type="submit" [disabled]="!customerForm.valid" >
+        <mat-icon>edit</mat-icon> Edit
+    </button>
+    }
+
+</mat-dialog-actions> -->

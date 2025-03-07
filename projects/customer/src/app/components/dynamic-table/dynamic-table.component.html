@@ -1,0 +1,36 @@
+<div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 dynamic-table">
+            <!-- Dynamic Columns -->
+           @for (column of columns(); track column.columnDef) {
+                <ng-container  [matColumnDef]="column.columnDef">
+                    <th mat-header-cell *matHeaderCellDef> {{column.header}} </th>
+                    @if(column.columnDef != 'actions') {
+                     <td mat-cell *matCellDef="let element"> {{column.cell(element)}} </td>
+                  
+                    }@else{
+                    <td mat-cell *matCellDef="let element">
+                        <button class="action" mat-mini-fab aria-label="edit row" (click)="itemChanged.emit(element)">
+                        <mat-icon>edit</mat-icon>
+                        </button>
+                        <button class="action" mat-mini-fab  aria-label="delete row" (click)="itemRemoved.emit(element.id)">
+                        <mat-icon>delete</mat-icon> 
+                        </button>
+                    </td>
+                    }
+                </ng-container>
+            }@empty {
+                <mat-progress-spinner></mat-progress-spinner>
+                <div >loading ...</div>
+            }
+            
+        <!-- Header and Row -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns();"></tr>
+    </table>
+
+    <!--Pagination -->
+    <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons
+    aria-label="Select page of  data()">
+    </mat-paginator>
+</div>

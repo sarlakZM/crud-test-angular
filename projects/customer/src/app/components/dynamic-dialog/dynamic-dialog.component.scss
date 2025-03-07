@@ -1,0 +1,18 @@
+.dialog{
+  mat-form-field + mat-form-field {
+    margin-left: 8px;
+  }
+
+  .cross-validation-error-message {
+    color: var(--mat-form-field-error-text-color, var(--mat-sys-error));
+    margin-top: 13px;
+    font-size: 0.8rem;
+  }
+}
+
+
+
+
+
+
+  
