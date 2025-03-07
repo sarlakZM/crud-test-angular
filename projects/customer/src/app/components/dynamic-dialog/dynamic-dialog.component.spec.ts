@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MAT_DATE_FORMATS, MAT_NATIVE_DATE_FORMATS, provideNativeDateAdapter } from '@angular/material/core';
 
 import { DynamicDialogComponent } from './dynamic-dialog.component';
@@ -9,6 +9,7 @@ import { CustomersStore } from '../../store/customer.store';
 describe('Component: DynamicDialogComponent', () => {
   let component: DynamicDialogComponent;
   let fixture: ComponentFixture<DynamicDialogComponent>;
+  let mockDialogRef: jasmine.SpyObj<MatDialogRef<DynamicDialogComponent>>;
   // let mockCustomersStore: jasmine.SpyObj<CustomersStore>;
   let mockCustomersStore: any;
   const dialogData = {
@@ -18,7 +19,10 @@ describe('Component: DynamicDialogComponent', () => {
   }
   beforeEach(async () => {
     mockCustomersStore = jasmine.createSpyObj('CustomersStore', 
-      ['getCutomersEmails', 'customers', 'AddCustomer', 'updateCustomerByID']);
+      ['getCutomersEmails', 'customers', 'AddCustomer', 'updateCustomerByID', 'isLoading']);
+  
+    mockCustomersStore.isLoading.and.returnValue(false); // Mock isLoading to return false
+    mockDialogRef = jasmine.createSpyObj('MatDialogRef', ['close']);
 
     await TestBed.configureTestingModule({
       imports: [DynamicDialogComponent],
@@ -28,6 +32,7 @@ describe('Component: DynamicDialogComponent', () => {
         provideNativeDateAdapter(),
         { provide: MAT_DATE_FORMATS, useValue: MAT_NATIVE_DATE_FORMATS },
         { provide: MAT_DIALOG_DATA, useValue: dialogData },
+        { provide: MatDialogRef, useValue: mockDialogRef },
         { provide: CustomersStore, useValue: mockCustomersStore },
       ]
     })
@@ -64,6 +69,7 @@ describe('Component: DynamicDialogComponent', () => {
     });
     component.onSubmit();
     expect(mockCustomersStore.AddCustomer).toHaveBeenCalledWith(jasmine.objectContaining({ firstname: 'firstname' }));
+    expect(mockDialogRef.close).toHaveBeenCalled();
   });
   
   it('should call updateCustomerByID on submit when mode is edit', () => {
@@ -80,6 +86,7 @@ describe('Component: DynamicDialogComponent', () => {
     });
     component.onSubmit();
     expect(mockCustomersStore.updateCustomerByID).toHaveBeenCalledWith(1, jasmine.objectContaining({ firstname: 'firstname' }));
+    expect(mockDialogRef.close).toHaveBeenCalled();
   });
   
   

@@ -6,6 +6,7 @@ import {
   MatDialogContent,
   MatDialogActions,
   MatDialogClose,
+  MatDialogRef,
 } from '@angular/material/dialog';
 import {MatButtonModule} from '@angular/material/button';
 import { CustomersStore } from '../../store/customer.store';
@@ -30,6 +31,7 @@ import { bankAccountNumberValidator, mobileNumberValidator, uniqueFieldValidator
   styleUrl: './dynamic-dialog.component.scss'
 })
 export class DynamicDialogComponent {
+  readonly dialogRef = inject(MatDialogRef<DynamicDialogComponent>);
   dataDialog = signal(inject(MAT_DIALOG_DATA));
   private readonly customersStore = inject(CustomersStore);
   private readonly fb = inject(FormBuilder);
@@ -59,10 +61,14 @@ export class DynamicDialogComponent {
   }
 
   onSubmit(){
-      const customer = { ...this.customerForm.value, dateOfBirth: this.customerForm.value.dateOfBirth?.toDateString() } 
+    const customer = { ...this.customerForm.value, dateOfBirth: this.customerForm.value.dateOfBirth?.toDateString() } 
     this.dataDialog().mode === 'add' ? //Add Customer
-      this.customersStore.AddCustomer( customer as ICustomer) : //Edit Customer
-     this.customersStore.updateCustomerByID(this.dataDialog().item.id, customer as ICustomer);
+    this.customersStore.AddCustomer( customer as ICustomer) : //Edit Customer
+    this.customersStore.updateCustomerByID(this.dataDialog().item.id, customer as ICustomer);
+
+    if(!this.customersStore.isLoading()){
+      this.dialogRef.close();
+    }
   }
 
  

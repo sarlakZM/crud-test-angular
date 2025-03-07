@@ -29,17 +29,12 @@ export class CustomerComponent {
   }
 
   addCustomer () {
-    const dialogRef = this.dialog.open(DynamicDialogComponent, {
+    this.dialog.open(DynamicDialogComponent, {
       data: {
         mode: 'add',
         title: 'Add Data'
       },
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');     
-    });
-    
+    }); 
   }
 
   itemRemoved (id: number) {
@@ -56,5 +51,5 @@ export class CustomerComponent {
     });
 
   }
-
+  
 }
