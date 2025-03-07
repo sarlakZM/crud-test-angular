@@ -1,5 +1,4 @@
-import { Component, computed, effect, inject, linkedSignal, signal } from '@angular/core';
-import { rxResource} from '@angular/core/rxjs-interop';
+import { Component, effect, inject, signal } from '@angular/core';
 import {
   MatDialog,
   MAT_DIALOG_DATA,
@@ -61,8 +60,8 @@ export class DynamicDialogComponent {
 
   onSubmit(){
       const customer = { ...this.customerForm.value, dateOfBirth: this.customerForm.value.dateOfBirth?.toDateString() } 
-    this.dataDialog().mode === 'add' ? 
-      this.customersStore.AddCustomer( customer as ICustomer) :
+    this.dataDialog().mode === 'add' ? //Add Customer
+      this.customersStore.AddCustomer( customer as ICustomer) : //Edit Customer
      this.customersStore.updateCustomerByID(this.dataDialog().item.id, customer as ICustomer);
   }
 

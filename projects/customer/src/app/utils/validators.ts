@@ -6,18 +6,23 @@ import { PhoneNumberUtil, PhoneNumberFormat } from 'google-libphonenumber';
 
 export function uniqueFieldValidator(existingValues: string[],  dialogData:{[key:string]: any}): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-        let values = [...existingValues]
-        if(dialogData['mode'] == 'edit'){
-            values = [...existingValues].filter( item => item != dialogData['item'].email)
-        }
-        
-      const isUnique = !values.includes(control.value);
-      return isUnique ? null : { uniqueField: { value: 'This value is already taken' } };
+      try {
+          let values = [...existingValues]
+          if(dialogData['mode'] == 'edit'){
+              values = [...existingValues].filter( item => item != dialogData['item'].email)
+          }
+          
+          const isUnique = !values.includes(control.value);
+          return isUnique ? null : { uniqueField: { value: 'This value is already taken' } };
+      } catch (e) {
+         return { invalidMobileNumber: { value : e} };
+      }; 
     };
   }
 
 export function uniqueMultiFieldValidator(existingValues: any[], dialogData:{[key:string]: any}): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
+      try {
         const firstname = control.get('firstname')?.value;
         const lastname = control.get('lastname')?.value;
         const dateOfBirth = control.get('dateOfBirth')?.value;
@@ -26,8 +31,12 @@ export function uniqueMultiFieldValidator(existingValues: any[], dialogData:{[ke
             values = [...existingValues].filter( item => item.id != dialogData['item'].id)
         }
         const isUnique = !values.find( item => (item.firstname == firstname && item.lastname == lastname && item.dateOfBirth == dateOfBirth.toDateString()));
-      return isUnique ? null : { uniqueMultiField: { value: 'Customers must be unique: These values ( First Name, Last Name and Date Of Birth) are already taken.' } };
+        return isUnique ? null : { uniqueMultiField: { value: 'Customers must be unique: These values ( First Name, Last Name and Date Of Birth) are already taken.' } };
+    } catch (e) {
+       return { invalidMobileNumber: { value : e} };
     };
+        
+  };
 }
 
 export function bankAccountNumberValidator(control: AbstractControl): ValidationErrors | null {
@@ -45,7 +54,7 @@ export function mobileNumberValidator(control: AbstractControl): ValidationError
       const formattedNumber = phoneUtil.format(phoneNumber, PhoneNumberFormat.INTERNATIONAL);
 
       // Log the formatted number or use it as needed
-      console.log('Formatted Number:', formattedNumber);
+      // console.log('Formatted Number:', formattedNumber);
 
       return isValid ? null : { invalidMobileNumber: { value : 'Invalid mobile number.'} };
     } catch (e) {

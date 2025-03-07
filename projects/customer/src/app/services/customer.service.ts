@@ -1,7 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { LocalStorageService } from "../../../../shell/src/app/shared";
-import { ICustomer, ICustomerWithID } from "../models/customer.model";
-import { of } from "rxjs";
+import { ICustomerWithID } from "../models/customer.model";
 
 @Injectable({
   providedIn: 'root'

@@ -81,9 +81,6 @@
              </div>
         }
 
-        {{customerForm.valid}}
-        {{customerForm.errors}}
-
       <div mat-dialog-actions align="end">
         <button mat-raised-button  mat-dialog-close>Cancel</button>
 
@@ -101,17 +98,3 @@
     </form>
 
 </mat-dialog-content>
-<!-- <mat-dialog-actions align="end">
-  <button mat-raised-button  mat-dialog-close>Cancel</button>
-    @if(dataDialog().mode === 'add'){
-        <button mat-raised-button  type="submit" [disabled]="!customerForm.valid">
-
-        <mat-icon>save</mat-icon> Save
-    </button>
-    }@else{
-        <button mat-raised-button   type="submit" [disabled]="!customerForm.valid" >
-        <mat-icon>edit</mat-icon> Edit
-    </button>
-    }
-
-</mat-dialog-actions> -->

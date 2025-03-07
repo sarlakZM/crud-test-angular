@@ -17,7 +17,7 @@ export class DynamicTableComponent {
   readonly data = input<any>([], {alias: 'dataSource'});
   dataSource = new MatTableDataSource<any>(this.data());
 
-  readonly columns = input<Column[]>([], {alias: 'columns'});
+  columns = input<Column[]>([], {alias: 'columns'});
   displayedColumns: Signal<string[]>  = computed(() => this.columns().map(c => c.columnDef) ); 
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -27,9 +27,8 @@ export class DynamicTableComponent {
 
   constructor() {
     effect(() => {
-      // this.data();
-      this.dataSource = new MatTableDataSource(this.data());
       this.columns();
+      this.dataSource = new MatTableDataSource(this.data());
     });
   }
 

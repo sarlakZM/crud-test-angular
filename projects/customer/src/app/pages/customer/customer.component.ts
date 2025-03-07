@@ -7,7 +7,7 @@ import { DynamicTableComponent } from '../../components/dynamic-table/dynamic-ta
 import { MatDialog } from '@angular/material/dialog';
 import { DynamicDialogComponent } from '../../components/dynamic-dialog/dynamic-dialog.component';
 import { CustomersStore } from '../../store/customer.store';
-
+import { COLUMN_NAME } from '../../utils/table';
 
 
 @Component({
@@ -19,25 +19,14 @@ import { CustomersStore } from '../../store/customer.store';
 export class CustomerComponent {
   readonly customersStore = inject(CustomersStore);
   readonly dialog = inject(MatDialog);
-
+  readonly columns: Column[] = [...COLUMN_NAME];
   dataSource: ICustomerWithID[] = [];
-  columns: Column[] = [
-    { columnDef: 'firstname', header: 'firstname', cell: (element: any) => `${element.firstname}` },
-    { columnDef: 'lastname', header: 'lastname', cell: (element: any) => `${element.lastname}` },
-    { columnDef: 'dateOfBirth', header: 'dateOfBirth', cell: (element: any) => `${element.dateOfBirth}` },
-    { columnDef: 'phoneNumber', header: 'phoneNumber', cell: (element: any) => `${element.phoneNumber}` },
-    { columnDef: 'email', header: 'Email', cell: (element: any) => `${element.email}` },
-    { columnDef: 'bankAccountNumber', header: 'BankAccountNumber', cell: (element: any) => `${element.bankAccountNumber}` },
-    { columnDef: 'actions', header: 'Actions', cell: (element: any) => `${element.actions}` }
-  ];
 
   constructor(){
     effect(() => {
       this.dataSource = this.customersStore.getCutomers();
     });
   }
-
-
 
   addCustomer () {
     const dialogRef = this.dialog.open(DynamicDialogComponent, {
@@ -67,4 +56,5 @@ export class CustomerComponent {
     });
 
   }
+
 }
